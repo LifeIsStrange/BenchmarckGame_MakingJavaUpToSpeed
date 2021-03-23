@@ -10,5 +10,5 @@ the current reference output is 2.113009097
 remaining TODOs:
 
 * replace adds by horizontal adds
-* bench: I get on average ~0.08 seconds on my machine while the C# benchmarkGame has 0.82
+* bench: I get on average ~0.08 seconds on my machine while an equivalent C# version run in ~0.03 seconds
 * optimize
