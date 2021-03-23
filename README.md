@@ -10,6 +10,5 @@ the current reference output is 2.113009097
 remaining TODOs:
 
 * replace adds by horizontal adds
-* change default input size to 100
-* bench
+* bench: I get on average ~0.08 seconds on my machine
 * optimize
