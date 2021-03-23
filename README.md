@@ -15,3 +15,13 @@ Conclusions: well no conclusion can be drawn before horizontal adds are added, h
 * optimize
 
 [0] well maybe that some of it is due to some workarounds/inneficiencies I had to do because of not always finding a one to one API correspondance with the C# implementation.
+
+Notes:
+The benchmark is somehow unfair given that the C# implementation uses:
+* A Span aka stack allocated array
+* manual memory management (unsafe fixed pointers)
+* explictit inlining and compiler hints (hot)
+* the implementation has been written for C# first and then ported so no trial and error of code shapes for java
+Despite this, openjdk seems to be multiple times faster on "large" input sizes.
+
+Question: is .net (5.0.4) faster on Windows ?
