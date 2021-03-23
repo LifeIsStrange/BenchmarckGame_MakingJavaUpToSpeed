@@ -9,7 +9,7 @@ the current reference output is 2.113009097
 
 remaining TODOs:
 
-replace adds by horizontal adds
-change default input size to 100
-bench
-optimize
+* replace adds by horizontal adds
+* change default input size to 100
+* bench
+* optimize
