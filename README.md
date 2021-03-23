@@ -25,4 +25,4 @@ The benchmark is somehow unfair given that the C# implementation uses:
 * 
 Despite this, openjdk seems to be multiple times faster on "large" input sizes.
 
-Question: is .net (5.0.4) faster on Windows ?
+Question: is .NET (5.0.4) faster on Windows ?
