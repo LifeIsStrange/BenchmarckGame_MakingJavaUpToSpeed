@@ -3,6 +3,8 @@ import jdk.incubator.vector.*;
 import java.io.Console;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -15,7 +17,9 @@ class SpectralNorm
 
     public static void main(String[] args)
     {
-        int n = 10;
+        var startTime = Instant.now();
+
+        int n = 100;
         if (args.length > 0) n = Integer.parseInt(args[0]);
 
         var u = new double[n];
@@ -34,6 +38,10 @@ class SpectralNorm
         // WHY NO CLONING despite span value type
         var result = Math.sqrt(dot(u, v, n) / dot(v, v, n));
         System.out.println(BigDecimal.valueOf(result).setScale(9, RoundingMode.HALF_UP));
+
+        var endTime = Instant.now();
+        var duration = Duration.between(startTime, endTime);
+        System.out.println(duration);
     }
 
     private static double A(int i, int j)
@@ -71,16 +79,15 @@ class SpectralNorm
                 tmp[1] = A(i, j + 1);
                 var a = DoubleVector.fromArray(SPECIES, tmp, 0);
 
-                // is the operation in place
                 sum = sum.add(b.div(a));
             }
 
             // should be horizontal
             sum = sum.add(sum);
-            System.err.println("CHICHON");
+            /*System.err.println("CHICHON");
             System.out.println(sum);
             System.err.println("JEANMI");
-            System.err.println(Arrays.toString(outv));
+            System.err.println(Arrays.toString(outv));*/
 
             // to double should only be done on the first element
             outv[i] = sum.toDoubleArray()[0];
@@ -108,7 +115,6 @@ class SpectralNorm
                 tmp[1] = A(j + 1, i);
                 var a = DoubleVector.fromArray(SPECIES, tmp, 0);
 
-                // is the operation in place
                 sum = sum.add(b.div(a));
             }
 
@@ -128,62 +134,3 @@ class SpectralNorm
         mult_Atv(tmp, outv, n);
     }
 }
-
-/*
-public class Main {
-    public static void main(String... args) {
-        System.out.print(System.getProperty("java.version"));
-
-        int count = 1000_000;
-        float a[] = new float[count];
-        float b[] = new float[count];
-        float c[] = new float[count];
-        Random r = new Random();
-        for (int i = 0; i < count; ++i) {
-            a[i] = r.nextFloat();
-            b[i] = r.nextFloat();
-        }
-
-        for (int i = 0; i < 10; ++i) {
-            sqrtsum(a, b,c);
-            sqrtsumVector(a, b,c);
-        }
-
-        long s = System.nanoTime();
-        for (int i = 0; i < 100; ++i) {
-            sqrtsum(a, b,c);
-        }
-        long m = System.nanoTime();
-        System.out.println(m - s);
-        for (int i = 0; i < 100; ++i) {
-            sqrtsumVector(a, b,c);
-        }
-        System.out.println(System.nanoTime() - m);
-    }
-
-    static void sqrtsum(float[] a, float[] b, float[] c) {
-        for (int i = 0; i < a.length; ++i) {
-            c[i] = -(a[i] * a[i] + b[i] * b[i]);
-        }
-    }
-
-    static VectorSpecies<Float> SPECIES = FloatVector.SPECIES_256;
-
-    static void sqrtsumVector(float[] a, float[] b, float[] c) {
-        int i = 0;
-        int len = a.length & ~(SPECIES.length() - 1);
-        for (; i < len; i+= SPECIES.length()) {
-            //var m = SPECIES.indexInRange(i, a.length);
-
-            var va = FloatVector.fromArray(SPECIES, a, i);
-            var vb = FloatVector.fromArray(SPECIES, b, i);
-            var vc = va.mul(va)
-                    .add(vb.mul(vb))
-                    .neg();
-            vc.intoArray(c, i);
-        }
-        for (; i < a.length; ++i) {
-            c[i] = (a[i] * a[i] + b[i] * b[i]) * -1f;
-        }
-    }
-}*/
