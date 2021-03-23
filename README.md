@@ -22,7 +22,7 @@ The benchmark is somehow unfair given that the C# implementation uses:
 * manual memory management (unsafe fixed pointers)
 * explictit inlining and compiler hints (hot)
 * the implementation has been written for C# first and then ported so no trial and error of code shapes for java
-* 
+
 Despite this, openjdk seems to be multiple times faster on "large" input sizes.
 
 Question: is .NET (5.0.4) faster on Windows ?
