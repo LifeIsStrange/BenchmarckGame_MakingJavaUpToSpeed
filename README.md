@@ -14,6 +14,9 @@ remaining TODOs:
 Conclusions: well no conclusion can be drawn before horizontal adds are added, however preliminary results seems to indicate that the JDK has a higher "fixed" cost[0] for small inputs but has significantly better througput for larger inputs.
 * optimize
 
+NEW RESULTS WITH HORIZONTAL ADD emulation:
+1.6 seconds for the Java implementation at n = 5500 and 1 second for C# at same n. Some tuning will be needed.
+
 [0] well maybe that some of it is due to some workarounds/inneficiencies I had to do because of not always finding a one to one API correspondance with the C# implementation.
 
 Notes:
