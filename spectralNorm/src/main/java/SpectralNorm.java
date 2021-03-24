@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 import java.util.stream.Stream;
 
 import static jdk.incubator.vector.VectorOperators.*;
@@ -19,7 +20,7 @@ class SpectralNorm
     {
         var startTime = Instant.now();
 
-        int n = 100;
+        int n = 5500;
         if (args.length > 0) n = Integer.parseInt(args[0]);
 
         var u = new double[n];
@@ -83,14 +84,20 @@ class SpectralNorm
             }
 
             // should be horizontal
-            sum = sum.add(sum);
+            // explanation of horizontal add https://www.quora.com/Is-there-an-SIMD-architecture-that-supports-horizontal-cumulative-sum-Prefix-sum-as-a-single-instruction
+            var mask = new boolean[2];
+            Arrays.fill(mask, true);
+            var r = sum.reduceLanes(ADD, VectorMask.fromArray(SPECIES,mask, 0));
+
+            ///sum = sum.add(sum);
             /*System.err.println("CHICHON");
             System.out.println(sum);
             System.err.println("JEANMI");
             System.err.println(Arrays.toString(outv));*/
 
             // to double should only be done on the first element
-            outv[i] = sum.toDoubleArray()[0];
+            //outv[i] = sum.toDoubleArray()[0];
+            outv[i] = r;
         });
     }
 
@@ -115,15 +122,21 @@ class SpectralNorm
                 tmp[1] = A(j + 1, i);
                 var a = DoubleVector.fromArray(SPECIES, tmp, 0);
 
+
                 sum = sum.add(b.div(a));
             }
 
             // should be horizontal
-            sum = sum.add(sum);
-
+            //sum = sum.add(sum);
+            var mask = new boolean[2];
+            Arrays.fill(mask, true);
+            var r = sum.reduceLanes(ADD, VectorMask.fromArray(SPECIES,mask, 0));
+            //var lel = sum.toDoubleArray();
+            //var r = lel[0] + lel[1];
 
             // to double should only be done on the first element
-            outv[i] = sum.toDoubleArray()[0];
+            //outv[i] = sum.toDoubleArray()[0];
+            outv[i] = r;
         });
     }
 
@@ -134,3 +147,7 @@ class SpectralNorm
         mult_Atv(tmp, outv, n);
     }
 }
+
+// n-body, mandelbrot, pcre/graal/jep regex
+// parallel for, getEl , create,
+// 1.274219991
