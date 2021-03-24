@@ -5,17 +5,11 @@ you'll need openjdk >= 16 e.g through sdkman you can do sdk use java 16.0.0.hs-a
 Currenlty (2021.1 beta 3) intellij doesn't allow to sucessfully run a project using the Vector API so run shadowjar and then run on your shell:
 java --enable-preview --add-modules=jdk.incubator.vecto -jar spectralNorm-1.0-SNAPSHOT-all.jar
 
-the current reference output is 2.113009097
-
-remaining TODOs:
-
-* replace adds by horizontal adds
-* bench: I get on average ```~0.08 seconds``` on my machine while an equivalent C# version run in ```~0.03 seconds``` for n = 100 and respectively ```~1.68``` and ```~9.4 seconds``` for n = 10K
-Conclusions: well no conclusion can be drawn before horizontal adds are added, however preliminary results seems to indicate that the JDK has a higher "fixed" cost[0] for small inputs but has significantly better througput for larger inputs.
-* optimize
+the current reference output is 1.274224153
 
 NEW RESULTS WITH HORIZONTAL ADD emulation:
-1.6 seconds for the Java implementation at n = 5500 and 1 second for C# at same n. Some tuning will be needed.
+By moving an array allocation out of a hot loop I was able to get 
+1.09 second for the Java implementation at n = 5500 and 1.01 second for C# at same n. Some tuning will be needed.
 
 [0] well maybe that some of it is due to some workarounds/inneficiencies I had to do because of not always finding a one to one API correspondance with the C# implementation.
 
